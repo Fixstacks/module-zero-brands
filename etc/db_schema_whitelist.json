@@ -1,0 +1,19 @@
+{
+    "zero_brand": {
+        "column": {
+            "option_id": true,
+            "url_key": true,
+            "logo": true,
+            "description": true,
+            "meta_title": true,
+            "meta_description": true,
+            "is_featured": true,
+            "sort_order": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ZERO_BRAND_URL_KEY": true,
+            "ZERO_BRAND_OPTION_ID_EAV_ATTRIBUTE_OPTION_OPTION_ID": true
+        }
+    }
+}

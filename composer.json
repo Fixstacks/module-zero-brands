@@ -1,0 +1,46 @@
+{
+    "name": "fixstacks/module-zero-brands",
+    "description": "Zero for Magento Open Source: shop by brand: a page per brand, an A–Z of brands, the brand on product pages.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "authors": [
+        {
+            "name": "Roman Pasichnyk"
+        }
+    ],
+    "homepage": "https://fixstacks.com/zero",
+    "keywords": [
+        "magento",
+        "magento2",
+        "magento-open-source",
+        "zero",
+        "brands",
+        "manufacturer"
+    ],
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "103.0.*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-search": "*",
+        "magento/module-config": "*",
+        "magento/module-eav": "*",
+        "magento/module-elasticsearch": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-store": "*",
+        "magento/module-theme": "*",
+        "fixstacks/module-zero-layered-navigation": "^1.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Zero\\Brands\\": ""
+        }
+    }
+}

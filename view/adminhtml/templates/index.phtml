@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * Catalog > Brands.
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Zero\Brands\ViewModel\Admin $admin */
+$admin = $block->getData('view_model');
+$error = $admin->error();
+?>
+<div class="page-actions-buttons" style="margin-bottom: 20px; text-align: right;">
+    <a class="action-primary" href="<?= $escaper->escapeUrl($admin->url('zero_brands/brand/edit')) ?>"><?= $escaper->escapeHtml(__('Add Brand')) ?></a>
+</div>
+<?php if ($error): ?>
+    <div class="message message-error"><?= $escaper->escapeHtml($error) ?></div>
+<?php endif; ?>
+<p><?= $escaper->escapeHtml(__('Brands are the options of the product attribute set in Stores > Configuration > Zero > Brands. Set a product\'s brand on the product; here, each brand\'s page, logo and texts.')) ?></p>
+<table class="data-grid">
+    <thead>
+        <tr>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Logo')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Brand')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Products')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Page')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Featured')) ?></th>
+            <th class="data-grid-th"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($admin->all() as $brand): ?>
+            <?php $logo = $admin->logoUrl($brand['logo']); ?>
+            <tr>
+                <td><?php if ($logo): ?><img src="<?= $escaper->escapeUrl($logo) ?>" alt="" style="max-height: 32px; max-width: 96px;"><?php endif; ?></td>
+                <td><?= $escaper->escapeHtml($brand['admin_name']) ?></td>
+                <td><?= (int) $brand['products'] ?></td>
+                <td><a href="<?= $escaper->escapeUrl($admin->storefrontUrl($brand)) ?>" target="_blank">/<?= $escaper->escapeHtml($brand['url_key']) ?></a></td>
+                <td><?= $brand['is_featured'] ? $escaper->escapeHtml(__('Yes')) : '' ?></td>
+                <td><a href="<?= $escaper->escapeUrl($admin->url('zero_brands/brand/edit', ['id' => $brand['option_id']])) ?>"><?= $escaper->escapeHtml(__('Edit')) ?></a></td>
+            </tr>
+        <?php endforeach; ?>
+        <?php if (!$admin->all()): ?>
+            <tr><td colspan="6"><?= $escaper->escapeHtml(__('No brands yet.')) ?></td></tr>
+        <?php endif; ?>
+    </tbody>
+</table>

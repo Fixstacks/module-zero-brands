@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * The A–Z of brands: the featured ones as logos first, then every brand with
+ * products under its first letter (letter links jump to their group).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Zero\Brands\ViewModel\Brands $brands */
+$brands = $block->getData('view_model');
+$index = $brands->index();
+?>
+<div class="zero-brands flex flex-col gap-10">
+    <?php if ($index['featured']): ?>
+        <section aria-labelledby="zero-brands-featured">
+            <h2 id="zero-brands-featured" class="text-sm font-semibold uppercase tracking-wide mb-4"><?= $escaper->escapeHtml(__('Featured brands')) ?></h2>
+            <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <?php foreach ($index['featured'] as $brand): ?>
+                    <?php $logo = $brands->logoUrl($brand); ?>
+                    <li>
+                        <a href="<?= $escaper->escapeUrl($brands->url($brand)) ?>"
+                           class="flex h-24 items-center justify-center border border-base-300 bg-base-100 p-4 hover:border-base-content transition-colors">
+                            <?php if ($logo): ?>
+                                <img src="<?= $escaper->escapeUrl($logo) ?>" alt="<?= $escaper->escapeHtmlAttr($brand['name']) ?>" class="max-h-full max-w-full object-contain" loading="lazy">
+                            <?php else: ?>
+                                <span class="font-semibold"><?= $escaper->escapeHtml($brand['name']) ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </section>
+    <?php endif; ?>
+
+    <?php if ($index['letters']): ?>
+        <nav aria-label="<?= $escaper->escapeHtmlAttr(__('Brands by letter')) ?>" class="flex flex-wrap gap-1">
+            <?php foreach (array_keys($index['letters']) as $letter): ?>
+                <a href="#brands-<?= $escaper->escapeHtmlAttr((string) $letter) ?>" class="btn btn-sm btn-ghost min-w-9"><?= $escaper->escapeHtml((string) $letter) ?></a>
+            <?php endforeach; ?>
+        </nav>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <?php foreach ($index['letters'] as $letter => $group): ?>
+                <section id="brands-<?= $escaper->escapeHtmlAttr((string) $letter) ?>" class="scroll-mt-24">
+                    <h2 class="text-2xl font-semibold border-b border-base-300 pb-2 mb-3"><?= $escaper->escapeHtml((string) $letter) ?></h2>
+                    <ul class="flex flex-col gap-1.5">
+                        <?php foreach ($group as $brand): ?>
+                            <li>
+                                <a href="<?= $escaper->escapeUrl($brands->url($brand)) ?>" class="link link-hover">
+                                    <?= $escaper->escapeHtml($brand['name']) ?>
+                                </a>
+                                <span class="text-base-content/50 text-sm">(<?= (int) $brand['products'] ?>)</span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p class="text-base-content/60"><?= $escaper->escapeHtml(__('No brands yet.')) ?></p>
+    <?php endif; ?>
+</div>

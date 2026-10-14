@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * The product's brand by its name: the logo (or the name), linking to the
+ * brand's page.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Zero\Brands\ViewModel\Brands $brands */
+$brands = $block->getData('view_model');
+$brand = $brands->isEnabled() ? $brands->ofProduct() : null;
+if (!$brand) {
+    return;
+}
+$logo = $brands->logoUrl($brand);
+?>
+<a href="<?= $escaper->escapeUrl($brands->url($brand)) ?>" class="zero-product-brand inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide link link-hover mb-1"
+   title="<?= $escaper->escapeHtmlAttr(__('More from %1', $brand['name'])) ?>">
+    <?php if ($logo): ?>
+        <img src="<?= $escaper->escapeUrl($logo) ?>" alt="<?= $escaper->escapeHtmlAttr($brand['name']) ?>" class="h-6 w-auto object-contain">
+    <?php else: ?>
+        <?= $escaper->escapeHtml($brand['name']) ?>
+    <?php endif; ?>
+</a>

@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * A brand: its name (the attribute option's), page address, logo, texts.
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Zero\Brands\ViewModel\Admin $admin */
+$admin = $block->getData('view_model');
+$brand = $admin->current();
+$value = static fn (string $key) => (string) ($brand[$key] ?? '');
+$logo = $brand ? $admin->logoUrl($brand['logo']) : null;
+?>
+<form class="zero-brand-form" method="post" enctype="multipart/form-data" action="<?= $escaper->escapeUrl($admin->url('zero_brands/brand/save')) ?>">
+    <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($admin->formKey()) ?>">
+    <?php if ($brand): ?><input type="hidden" name="id" value="<?= (int) $brand['option_id'] ?>"><?php endif; ?>
+    <fieldset class="admin__fieldset">
+        <div class="admin__field _required">
+            <label class="admin__field-label" for="brand-name"><span><?= $escaper->escapeHtml(__('Name')) ?></span></label>
+            <div class="admin__field-control"><input class="admin__control-text" id="brand-name" name="name" required value="<?= $escaper->escapeHtmlAttr($value('admin_name')) ?>"></div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="brand-url"><span><?= $escaper->escapeHtml(__('URL Key')) ?></span></label>
+            <div class="admin__field-control">
+                <input class="admin__control-text" id="brand-url" name="url_key" value="<?= $escaper->escapeHtmlAttr($value('url_key')) ?>">
+                <div class="admin__field-note"><?= $escaper->escapeHtml(__('The page\'s address: /brands/{this}. Empty: made from the name.')) ?></div>
+            </div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="brand-logo"><span><?= $escaper->escapeHtml(__('Logo')) ?></span></label>
+            <div class="admin__field-control">
+                <?php if ($logo): ?>
+                    <p><img src="<?= $escaper->escapeUrl($logo) ?>" alt="" style="max-height: 64px; max-width: 200px;"></p>
+                    <label><input type="checkbox" name="logo_remove" value="1"> <?= $escaper->escapeHtml(__('Remove the logo')) ?></label>
+                <?php endif; ?>
+                <input type="file" id="brand-logo" name="logo" accept=".jpg,.jpeg,.png,.webp,.svg">
+            </div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="brand-description"><span><?= $escaper->escapeHtml(__('Description')) ?></span></label>
+            <div class="admin__field-control">
+                <textarea class="admin__control-textarea" id="brand-description" name="description" rows="6"><?= $escaper->escapeHtml($value('description')) ?></textarea>
+                <div class="admin__field-note"><?= $escaper->escapeHtml(__('Shown on the brand\'s page. Paragraphs, bold, lists and links are kept.')) ?></div>
+            </div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="brand-meta-title"><span><?= $escaper->escapeHtml(__('Meta Title')) ?></span></label>
+            <div class="admin__field-control"><input class="admin__control-text" id="brand-meta-title" name="meta_title" value="<?= $escaper->escapeHtmlAttr($value('meta_title')) ?>"></div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="brand-meta-description"><span><?= $escaper->escapeHtml(__('Meta Description')) ?></span></label>
+            <div class="admin__field-control"><textarea class="admin__control-textarea" id="brand-meta-description" name="meta_description" rows="2"><?= $escaper->escapeHtml($value('meta_description')) ?></textarea></div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="brand-featured"><span><?= $escaper->escapeHtml(__('Featured')) ?></span></label>
+            <div class="admin__field-control">
+                <label><input type="checkbox" id="brand-featured" name="is_featured" value="1"<?= !empty($brand['is_featured']) ? ' checked' : '' ?>> <?= $escaper->escapeHtml(__('Shown as a logo at the top of the brands page')) ?></label>
+            </div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="brand-sort"><span><?= $escaper->escapeHtml(__('Position Among Featured')) ?></span></label>
+            <div class="admin__field-control"><input class="admin__control-text" type="number" min="0" id="brand-sort" name="sort_order" value="<?= (int) ($brand['sort_order'] ?? 0) ?>" style="width: 6em;"></div>
+        </div>
+    </fieldset>
+    <div class="admin__field">
+        <div class="admin__field-control" style="display: flex; gap: 12px;">
+            <button type="submit" class="action-primary"><?= $escaper->escapeHtml(__('Save Brand')) ?></button>
+            <a class="action-secondary" href="<?= $escaper->escapeUrl($admin->url('zero_brands/brand/index')) ?>"><?= $escaper->escapeHtml(__('Back')) ?></a>
+            <?php if ($brand): ?>
+                <button type="submit" name="delete" value="1" class="action-tertiary"
+                        formnovalidate><?= $escaper->escapeHtml(__('Delete Brand')) ?></button>
+            <?php endif; ?>
+        </div>
+    </div>
+</form>

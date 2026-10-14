@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+
+    A brand page's catalog layer: the store's products under no category (the
+    store's root category isn't a page of its own), filtered by its brand
+    (fixed: Zero_LayeredNavigation), with the category page's filters.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Model\Layer\Resolver">
+        <arguments>
+            <argument name="layersPool" xsi:type="array">
+                <item name="zero_brand" xsi:type="string">Zero\Brands\Model\Layer\Brand</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Zero\Brands\Model\Layer\Brand" type="Magento\Catalog\Model\Layer\Category">
+        <arguments>
+            <argument name="context" xsi:type="object">Zero\Brands\Model\Layer\Context</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Zero\Brands\Model\Layer\Context" type="Magento\Catalog\Model\Layer\Category\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Zero\Brands\Model\Layer\ItemCollectionProvider</argument>
+        </arguments>
+    </virtualType>
+    <type name="Zero\Brands\Model\Layer\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="opensearch" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+                <item name="elasticsearch8" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

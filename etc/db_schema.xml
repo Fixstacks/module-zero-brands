@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+
+    A brand: an option of the brand attribute (its name is the option's
+    label) with its page's address, logo, description and texts.
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="zero_brand" resource="default" engine="innodb" comment="Zero Brand">
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" comment="Attribute Option ID"/>
+        <column xsi:type="varchar" name="url_key" nullable="false" length="128" comment="URL Key"/>
+        <column xsi:type="varchar" name="logo" nullable="true" length="255" comment="Logo (pub/media path)"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description (HTML)"/>
+        <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
+        <column xsi:type="varchar" name="meta_description" nullable="true" length="512" comment="Meta Description"/>
+        <column xsi:type="smallint" name="is_featured" unsigned="true" nullable="false" default="0" comment="Featured"/>
+        <column xsi:type="smallint" name="sort_order" unsigned="true" nullable="false" default="0" comment="Sort Order"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="option_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="ZERO_BRAND_URL_KEY">
+            <column name="url_key"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ZERO_BRAND_OPTION_ID_EAV_ATTRIBUTE_OPTION_OPTION_ID"
+                    table="zero_brand" column="option_id" referenceTable="eav_attribute_option" referenceColumn="option_id" onDelete="CASCADE"/>
+    </table>
+</schema>
