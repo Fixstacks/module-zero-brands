@@ -2,7 +2,7 @@
     "name": "fixstacks/module-zero-brands",
     "description": "Zero for Magento Open Source: shop by brand: a page per brand, an A–Z of brands, the brand on product pages.",
     "type": "magento2-module",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -33,7 +33,7 @@
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
-        "fixstacks/module-zero-layered-navigation": "^1.0"
+        "fixstacks/module-zero-layered-navigation": "^1.1"
     },
     "autoload": {
         "files": [
