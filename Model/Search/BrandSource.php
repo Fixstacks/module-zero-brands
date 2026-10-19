@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Zero\Brands\Model\Search;
 
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Zero\Brands\Model\Brands;
 use Zero\Brands\Model\Config;
 use Zero\Search\Model\SourceInterface;
@@ -22,7 +23,8 @@ class BrandSource implements SourceInterface
     public function __construct(
         private readonly Brands $brands,
         private readonly Config $config,
-        private readonly UrlInterface $url
+        private readonly UrlInterface $url,
+        private readonly StoreManagerInterface $storeManager
     ) {
     }
 
@@ -38,7 +40,8 @@ class BrandSource implements SourceInterface
         }
         $words = preg_split('/\s+/u', mb_strtolower(trim($query))) ?: [];
         $items = [];
-        foreach ($this->brands->all($storeId) as $brand) {
+        $websiteId = (int) $this->storeManager->getStore($storeId)->getWebsiteId();
+        foreach ($this->brands->all($storeId, $websiteId) as $brand) {
             if (!$brand['products']) {
                 continue;
             }

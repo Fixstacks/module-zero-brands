@@ -42,11 +42,12 @@ class Brands
     }
 
     /**
-     * Every brand, by name; with how many products each has (all, enabled or not).
+     * Every brand, by name; with how many products each has (all, enabled or
+     * not), on one website's catalog when $websiteId is given.
      *
      * @return array<int, array> By option id
      */
-    public function all(int $storeId = 0): array
+    public function all(int $storeId = 0, ?int $websiteId = null): array
     {
         $connection = $this->resource->getConnection();
         $attribute = $this->attribute();
@@ -68,7 +69,7 @@ class Brands
                 ['url_key', 'logo', 'description', 'meta_title', 'meta_description', 'is_featured', 'brand_sort' => 'sort_order']
             )
             ->where('o.attribute_id = ?', (int) $attribute->getId());
-        $counts = $this->productCounts((int) $attribute->getId(), (string) $attribute->getBackendTable());
+        $counts = $this->productCounts((int) $attribute->getId(), (string) $attribute->getBackendTable(), $websiteId);
         $brands = [];
         foreach ($connection->fetchAll($select) as $row) {
             $id = (int) $row['option_id'];
@@ -181,7 +182,7 @@ class Brands
     /**
      * @return array<int, int>
      */
-    private function productCounts(int $attributeId, string $table): array
+    private function productCounts(int $attributeId, string $table, ?int $websiteId = null): array
     {
         $connection = $this->resource->getConnection();
         if ($table === '' || !$connection->isTableExists($table)) {
@@ -191,7 +192,7 @@ class Brands
         // Products shown in the catalog (not the hidden variants of configurable ones).
         $visibility = (int) $this->eavConfig->getAttribute(Product::ENTITY, 'visibility')->getId();
 
-        return array_map('intval', $connection->fetchPairs($connection->select()
+        $select = $connection->select()
             ->from(['b' => $table], ['value', 'COUNT(DISTINCT b.entity_id)'])
             ->join(
                 ['v' => $this->resource->getTableName('catalog_product_entity_int')],
@@ -201,6 +202,16 @@ class Brands
             ->where('b.attribute_id = ?', $attributeId)
             ->where('b.store_id = 0')
             ->where('v.value IN (?)', [2, 4])
-            ->group('b.value')));
+            ->group('b.value');
+        if ($websiteId !== null) {
+            // Only this website's products: each store lists its own brands.
+            $select->join(
+                ['w' => $this->resource->getTableName('catalog_product_website')],
+                $connection->quoteInto('w.product_id = b.entity_id AND w.website_id = ?', $websiteId),
+                []
+            );
+        }
+
+        return array_map('intval', $connection->fetchPairs($select));
     }
 }

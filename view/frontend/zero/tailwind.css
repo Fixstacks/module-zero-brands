@@ -1,0 +1,136 @@
+/* Built into the Zero theme's CSS while Zero_Brands is enabled: the brands carousel. */
+@source "../templates/**/*.phtml";
+
+@layer components {
+    .zero-brands-carousel {
+        padding-block: 2.5rem;
+        border-bottom: 1px solid var(--color-base-300);
+    }
+
+    .zero-brands-carousel-inner {
+        max-width: 72rem;
+        margin-inline: auto;
+        padding-inline: 1rem;
+    }
+
+    @media (min-width: 40rem) {
+        .zero-brands-carousel-inner {
+            padding-inline: 2rem;
+        }
+    }
+
+    .zero-brands-carousel-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .zero-brands-carousel-eyebrow {
+        margin: 0 0 0.25rem;
+        font-size: var(--text-2xs);
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+    }
+
+    .zero-brands-carousel-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+    }
+
+    .zero-brands-carousel-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: none;
+    }
+
+    .zero-brands-carousel-all {
+        margin-inline-end: 0.5rem;
+        font-size: var(--text-2xs);
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-decoration: underline;
+        text-underline-offset: 0.3em;
+    }
+
+    .zero-brands-carousel-button {
+        display: grid;
+        place-items: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border: 1px solid color-mix(in srgb, var(--color-base-content) 30%, transparent);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--color-base-content);
+        cursor: pointer;
+    }
+
+    .zero-brands-carousel-button:hover {
+        background: var(--color-base-200);
+    }
+
+    .zero-brands-carousel-track {
+        display: flex;
+        gap: 0.75rem;
+        margin: 0;
+        padding: 0 0 0.25rem;
+        list-style: none;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+    }
+
+    .zero-brands-carousel-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .zero-brands-carousel-item {
+        flex: 0 0 calc((100% - 1.5rem) / 3);
+        scroll-snap-align: start;
+    }
+
+    @media (min-width: 48rem) {
+        .zero-brands-carousel-item {
+            flex-basis: calc((100% - 3.75rem) / 6);
+        }
+    }
+
+    .zero-brands-carousel-link {
+        display: grid;
+        place-items: center;
+        aspect-ratio: 5 / 2;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--color-base-300);
+        background: color-mix(in srgb, var(--color-base-100) 60%, #ffffff);
+        transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .zero-brands-carousel-link:hover {
+        border-color: color-mix(in srgb, var(--color-base-content) 40%, transparent);
+    }
+
+    .zero-brands-carousel-link img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .zero-brands-carousel-name {
+        font-weight: 600;
+        text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .zero-brands-carousel-track {
+            scroll-behavior: auto;
+        }
+    }
+}

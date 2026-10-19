@@ -108,7 +108,7 @@ class Brands implements ArgumentInterface
 
     private function all(): array
     {
-        return $this->all ??= $this->brands->all($this->storeId());
+        return $this->all ??= $this->brands->all($this->storeId(), (int) $this->storeManager->getStore()->getWebsiteId());
     }
 
     private function storeId(): int

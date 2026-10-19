@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * The brands carousel (Block\Widget\Carousel): a row of logos that scrolls
+ * sideways (scroll snap; the buttons use the theme's data-scroller-*), each a
+ * link to its brand page; the name in type where a brand has no logo.
+ *
+ * @var \Zero\Brands\Block\Widget\Carousel $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$brands = $block->getBrands();
+if (!$brands) {
+    return;
+}
+$uid = 'zero-brands-' . substr(md5($block->getNameInLayout() . $block->getHeading()), 0, 8);
+?>
+<section class="zero-brands-carousel" aria-labelledby="<?= $escaper->escapeHtmlAttr($uid) ?>-title">
+    <div class="zero-brands-carousel-inner">
+        <div class="zero-brands-carousel-head">
+            <div>
+                <?php if ($block->getEyebrow() !== ''): ?>
+                    <p class="zero-brands-carousel-eyebrow"><?= $escaper->escapeHtml($block->getEyebrow()) ?></p>
+                <?php endif; ?>
+                <h2 id="<?= $escaper->escapeHtmlAttr($uid) ?>-title" class="zero-brands-carousel-title">
+                    <?= $escaper->escapeHtml($block->getHeading() !== '' ? $block->getHeading() : __('Brands')) ?>
+                </h2>
+            </div>
+            <div class="zero-brands-carousel-actions">
+                <a class="zero-brands-carousel-all" href="<?= $escaper->escapeUrl($block->getIndexUrl()) ?>"><?= $escaper->escapeHtml(__('All brands')) ?></a>
+                <button type="button" class="zero-brands-carousel-button" data-scroller-prev="#<?= $escaper->escapeHtmlAttr($uid) ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Previous brands')) ?>">&larr;</button>
+                <button type="button" class="zero-brands-carousel-button" data-scroller-next="#<?= $escaper->escapeHtmlAttr($uid) ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Next brands')) ?>">&rarr;</button>
+            </div>
+        </div>
+        <ul id="<?= $escaper->escapeHtmlAttr($uid) ?>" class="zero-brands-carousel-track">
+            <?php foreach ($brands as $brand): ?>
+                <li class="zero-brands-carousel-item">
+                    <a class="zero-brands-carousel-link" href="<?= $escaper->escapeUrl($brand['url']) ?>">
+                        <?php if ($brand['logo']): ?>
+                            <img src="<?= $escaper->escapeUrl($brand['logo']) ?>" alt="<?= $escaper->escapeHtmlAttr($brand['name']) ?>"
+                                 width="240" height="96" loading="lazy" decoding="async">
+                        <?php else: ?>
+                            <span class="zero-brands-carousel-name"><?= $escaper->escapeHtml($brand['name']) ?></span>
+                        <?php endif; ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</section>

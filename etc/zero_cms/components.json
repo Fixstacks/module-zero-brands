@@ -1,0 +1,12 @@
+{
+    "brands_carousel": {
+        "label": "Brands: carousel",
+        "description": "The logos of the brands this store sells, each linking to its page (the same as the Zero Brands carousel widget).",
+        "template": "Zero_Brands::component/carousel.phtml",
+        "fields": {
+            "eyebrow": {"type": "text", "label": "Eyebrow", "max": 80},
+            "heading": {"type": "text", "label": "Heading", "max": 120},
+            "limit": {"type": "number", "label": "Number of brands", "min": 1, "max": 24, "default": 12}
+        }
+    }
+}
