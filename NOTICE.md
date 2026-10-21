@@ -1,4 +1,4 @@
-# fixstacks/module-zero-brands — licensing
+# zerofront/module-zero-brands — licensing
 
 Copyright © 2026 Roman Pasichnyk.
 
